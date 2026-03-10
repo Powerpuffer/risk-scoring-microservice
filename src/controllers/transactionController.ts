@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { calculateRiskScore } from "../services/riskService";
 
 export const createTransaction = (req: Request, res: Response) => {
   const { amount, country, userAge } = req.body;
@@ -9,11 +10,14 @@ export const createTransaction = (req: Request, res: Response) => {
     });
   }
 
+  const riskScore = calculateRiskScore(amount, country, userAge)
+
   const transaction = {
     amount,
     country,
     userAge,
-    message: "Transaction received successfully"
+    riskScore
+    //message: "Transaction received successfully"
   };
 
   res.status(201).json(transaction);
